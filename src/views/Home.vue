@@ -32,7 +32,7 @@
               @blur="$v.cpf.$touch()"
             ></v-text-field>
             <v-row>
-              <v-col class="text-center">
+              <v-col v-if="!loading" class="text-center">
                 <v-btn
                   v-if="isFormValidated"
                   class="justify-end text-white my-5"
@@ -53,6 +53,9 @@
                   <span class="text-white">Localizar cadastro</span>
                 </v-btn>
               </v-col>
+              <v-col class="text-center" v-if="loading">
+                <v-btn loading disabled class="text-white"></v-btn>
+              </v-col>
             </v-row>
           </form>
         </v-card>
@@ -62,63 +65,92 @@
 </template>
 
 <script>
-  import { validationMixin } from 'vuelidate'
-  import { required, maxLength, minLength,numeric} from 'vuelidate/lib/validators'
-  import { validate } from 'gerador-validador-cpf'
-  const validaCpf = (value) => validate(value)
-  
+import { validationMixin } from "vuelidate";
+import {
+  required,
+  maxLength,
+  minLength,
+  numeric,
+} from "vuelidate/lib/validators";
+import { validate } from "gerador-validador-cpf";
+import axios from "axios";
+//import VueAxios from "vue-axios";
 
-  export default {
-    mixins: [validationMixin],
+const validaCpf = (value) => validate(value);
 
-    validations: {
-      name: { required, maxLength: maxLength(15),minLength: minLength(3) },
-      cpf: { required, validaCpf, numeric},
+export default {
+  mixins: [validationMixin],
+
+  validations: {
+    name: { required, maxLength: maxLength(15), minLength: minLength(3) },
+    cpf: { required, validaCpf, numeric },
+  },
+
+  data: () => ({
+    name: "",
+    cpf: "",
+    cadastros: [],
+    loading:false
+  }),
+
+  computed: {
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.name.$dirty) return errors;
+      !this.$v.name.maxLength &&
+        errors.push("Name must be at most 15 characters long");
+      !this.$v.name.required && errors.push("Name is required.");
+      errors.length > 0 ? true : false;
+      return errors;
+    },
+    cpfErrors() {
+      const errors = [];
+      if (!this.$v.cpf.$dirty) return errors;
+      !this.$v.cpf.numeric &&
+        errors.push("O campo CPF deve conter apenas números.");
+      !this.$v.cpf.validaCpf &&
+        errors.push("Essa combinação de dígitos não é válida para o campo CPF");
+      !this.$v.cpf.required && errors.push("CPF é um campo obrigatório");
+      errors.length > 0 ? true : false;
+      return errors;
+    },
+  },
+
+  methods: {
+    isFormValidated() {
+      return this.nameErrors.length == 0 && this.cpfErrors.length == 0
+        ? true
+        : false;
     },
 
-    data: () => ({
-      name: '',
-      cpf: '',
-    }),
-
-    computed: {
-      nameErrors () {
-        const errors = []
-        if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 15 characters long')
-        !this.$v.name.required && errors.push('Name is required.')
-        errors.length>0 ? true : false
-        return errors
-      },
-      cpfErrors () {
-        const errors = []
-        if (!this.$v.cpf.$dirty) return errors
-        !this.$v.cpf.numeric && errors.push('O campo CPF deve conter apenas números.')
-        !this.$v.cpf.validaCpf && errors.push('Essa combinação de dígitos não é válida para o campo CPF')
-        !this.$v.cpf.required && errors.push('CPF é um campo obrigatório')
-        errors.length>0 ? true : false
-        return errors
-      },
+    async submit() {
+      this.$v.$touch();
+      if (this.isFormValidated()) {
+        let nome = this.name;
+        let cpf = this.cpf;
+        this.loading=true;
+        //this.cadastros = await (await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)).body
+        axios
+          .get(
+            `https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(
+              nome
+            )}&cpf=${encodeURI(cpf)}`
+          ).then((response) => {
+            this.cadastros = response.data
+            if(this.cadastros[0].id){
+              console.log(response.data)
+              this.$router.push({ name: 'Cadastros', params: { cadastros: this.cadastros } })
+              
+            }else{
+              alert('Não foi possível localizar nenhum cadastro com os dados informados.')
+              this.loading=false
+            }
+          });
+          // .then((response) => (this.cadastros = response.body));
+      }
     },
-
-    methods: {
-      isFormValidated(){
-        return this.nameErrors.length==0 && this.cpfErrors.length ==0 ? true : false;
-      },
-
-      async submit () {
-        this.$v.$touch()
-        if (this.isFormValidated()){
-          let nome = this.name
-          let cpf = this.cpf
-          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)
-          console.log(response)
-          console.log(response.data)
-        }
-      },
-      
-    },
-  }
+  },
+};
 </script>
 <style>
 h2 {
