@@ -111,8 +111,9 @@
         if (this.isFormValidated()){
           let nome = this.name
           let cpf = this.cpf
-          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`,{mode:"no-cors"})
+          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)
           console.log(response)
+          console.log(response.data)
         }
       },
       
