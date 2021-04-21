@@ -109,9 +109,19 @@
       async submit () {
         this.$v.$touch()
         if (this.isFormValidated()){
+          let headers= new Headers({
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Request-Method": "GET",
+                "Accept": "*"
+            })
+          let myInit = { method: 'GET',
+               headers: headers,
+               mode: 'cors',
+               cache: 'default' };
+
           let nome = this.name
           let cpf = this.cpf
-          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)
+          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`,myInit)
           console.log(response)
         }
       },
