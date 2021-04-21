@@ -1,9 +1,13 @@
 <template>
   <v-container class="mt-6">
     <v-row class="no-gutters">
-      <v-col class="col-xs-12 offset-sm-2 col-sm-8 offset-lg-3 col-lg-6 px-auto ">
+      <v-col
+        class="col-xs-12 offset-sm-2 col-sm-8 offset-lg-3 col-lg-6 px-auto"
+      >
         <v-card elevation="2" class="align-self-center" outlined shaped>
-          <h2 class="text-center mt-5 pt-5 text-darkgreen">Login - Painel do cliente</h2>
+          <h2 class="text-center mt-5 pt-5 text-darkgreen">
+            Login - Painel do cliente
+          </h2>
           <form class="ma-5 px-6">
             <v-text-field
               v-model="name"
@@ -29,11 +33,27 @@
             ></v-text-field>
             <v-row>
               <v-col class="text-center">
-                <v-btn v-if="isFormValidated" class="justify-end text-white my-5" color="light-green" elevation="2" @click="submit" > <span class="text-white">Localizar cadastro</span> </v-btn>
-                <v-btn v-else class="justify-end text-white my-5" color="light-green" elevation="2" @click="submit" disabled> <span class="text-white">Localizar cadastro</span> </v-btn>
+                <v-btn
+                  v-if="isFormValidated"
+                  class="justify-end text-white my-5"
+                  color="light-green"
+                  elevation="2"
+                  @click="submit"
+                >
+                  <span class="text-white">Localizar cadastro</span>
+                </v-btn>
+                <v-btn
+                  v-else
+                  class="justify-end text-white my-5"
+                  color="light-green"
+                  elevation="2"
+                  @click="submit"
+                  disabled
+                >
+                  <span class="text-white">Localizar cadastro</span>
+                </v-btn>
               </v-col>
             </v-row>
-            
           </form>
         </v-card>
       </v-col>
@@ -89,9 +109,19 @@
       async submit () {
         this.$v.$touch()
         if (this.isFormValidated()){
+          let headers= new Headers({
+                "Access-Control-Allow-Origin": "http://portal-cliente-analise.vercel.app/",
+                "Access-Control-Request-Method": "GET",
+                "Accept": "*"
+            })
+          let myInit = { method: 'GET',
+               headers: headers,
+               mode: 'cors',
+               cache: 'default' };
+
           let nome = this.name
           let cpf = this.cpf
-          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)
+          let response = await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`,myInit)
           console.log(response)
         }
       },
@@ -100,15 +130,14 @@
   }
 </script>
 <style>
-h2{
-  font-size:1.5em !important;
+h2 {
+  font-size: 1.5em !important;
   font-weight: 400;
 }
-.text-white{
-  color:white;
+.text-white {
+  color: white;
 }
-.text-darkgreen{
-  color:#558B2F;
+.text-darkgreen {
+  color: #558b2f;
 }
-
 </style>
