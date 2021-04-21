@@ -110,7 +110,7 @@
         this.$v.$touch()
         if (this.isFormValidated()){
           let headers= new Headers({
-                "Access-Control-Allow-Origin": "http://portal-cliente-analise.vercel.app/",
+                "Access-Control-Allow-Origin": "http://portal-cliente-analise.vercel.app",
                 "Access-Control-Request-Method": "GET",
                 "Accept": "*"
             })
