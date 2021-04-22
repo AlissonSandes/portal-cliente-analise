@@ -130,8 +130,7 @@ export default {
         let cpf = this.cpf;
         this.loading=true;
         //this.cadastros = await (await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)).body
-        axios
-          .get(
+        axios.get(
             `https://cobpag-api.vercel.app/api/login?nome=${encodeURI(
               nome
             )}&cpf=${encodeURI(cpf)}`

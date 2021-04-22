@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Cadastros from '../views/Cadastros.vue'
+import Titulos from '../views/Titulos.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const routes = [
     path: '/cadastros',
     name: 'Cadastros',
     component: Cadastros
+  },
+  {
+    path: '/titulos',
+    name: 'Titulos',
+    component: Titulos
   }
 ]
 
