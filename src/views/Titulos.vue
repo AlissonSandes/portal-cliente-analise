@@ -29,8 +29,8 @@
                     v-if="item.situacao == 'A'"
                     type="button"
                     v-clipboard:copy="item.codbarras"
-                    v-clipboard:success="alert('Copiado com sucesso!')"
-                    v-clipboard:error="alert('Erro ao copiar código de barras.')"
+                    v-clipboard:success="onCopy"
+                    v-clipboard:error="onError"
                   >
                     <v-icon>mdi-barcode</v-icon>
                   </button>
@@ -64,6 +64,12 @@ export default {
       navigator.clipboard.writeText(codbarras);
 
       alert("Código de barras copiado com sucesso!");
+    },
+    onCopy(){
+      alert('Código de barras copiado com sucesso!')
+    },
+    onError(){
+      alert('Erro ao copiar código de barras.')
     },
     formatarData(data) {
       let ano = data.substring(0, 4);

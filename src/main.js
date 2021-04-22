@@ -7,11 +7,10 @@ import '@babel/polyfill'
 import VueClipboard from 'vue-clipboard2';
 
 Vue.config.productionTip = false
-
+Vue.use( VueClipboard)
 new Vue({
   router,
   store,
   vuetify,
-  VueClipboard,
   render: h => h(App)
 }).$mount('#app')
