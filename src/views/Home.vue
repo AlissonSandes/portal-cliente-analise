@@ -40,7 +40,7 @@
                   elevation="2"
                   @click="submit"
                 >
-                  <span class="text-white">Localizar cadastro</span>
+                  <span class="text-white">Login</span>
                 </v-btn>
                 <v-btn
                   v-else
@@ -50,7 +50,7 @@
                   @click="submit"
                   disabled
                 >
-                  <span class="text-white">Localizar cadastro</span>
+                  <span class="text-white">Login</span>
                 </v-btn>
               </v-col>
               <v-col class="text-center" v-if="loading">
@@ -132,7 +132,7 @@ export default {
         //this.cadastros = await (await fetch(`https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(nome)}&cpf=${encodeURI(cpf)}`)).body
         axios
           .get(
-            `https://cobpag-api.vercel.app/api/buscarcliente?nome=${encodeURI(
+            `https://cobpag-api.vercel.app/api/login?nome=${encodeURI(
               nome
             )}&cpf=${encodeURI(cpf)}`
           ).then((response) => {
