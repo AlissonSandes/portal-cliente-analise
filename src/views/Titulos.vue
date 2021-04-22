@@ -15,11 +15,23 @@
             </thead>
             <tbody>
               <tr v-for="item in titulos" :key="item.id">
-                <td v-bind:class="{ 'baixado' : isBaixado(item)}">{{ item.numdoc }}</td>
-                <td v-bind:class="{ 'baixado' : isBaixado(item)}">{{ formatarData(item.vencimento) }}</td>
-                <td v-bind:class="{ 'baixado' : isBaixado(item)}">{{ item.valor }}</td>
+                <td v-bind:class="{ baixado: isBaixado(item) }">
+                  {{ item.numdoc }}
+                </td>
+                <td v-bind:class="{ baixado: isBaixado(item) }">
+                  {{ formatarData(item.vencimento) }}
+                </td>
+                <td v-bind:class="{ baixado: isBaixado(item) }">
+                  {{ item.valor }}
+                </td>
                 <td class="text-center">
-                  <button v-if="item.situacao == 'A'" @click="copiarCodBarras(item.codbarras)">
+                  <button   
+                    v-if="item.situacao == 'A'"
+                    type="button"
+                    v-clipboard:copy="item.codbarras"
+                    v-clipboard:success="alert('Copiado com sucesso!')"
+                    v-clipboard:error="alert('Erro ao copiar código de barras.')"
+                  >
                     <v-icon>mdi-barcode</v-icon>
                   </button>
                   <v-icon v-else>mdi-success</v-icon>
@@ -50,26 +62,27 @@ export default {
   methods: {
     copiarCodBarras(codbarras) {
       navigator.clipboard.writeText(codbarras);
+
       alert("Código de barras copiado com sucesso!");
     },
-    formatarData(data){
-        let ano = data.substring(0,4)
-        let mes = data.substring(5,7)
-        let dia = data.substring(8,10)
-        return `${dia}/${mes}/${ano}`
+    formatarData(data) {
+      let ano = data.substring(0, 4);
+      let mes = data.substring(5, 7);
+      let dia = data.substring(8, 10);
+      return `${dia}/${mes}/${ano}`;
     },
-    formatarValor(){
-        //todo
+    formatarValor() {
+      //todo
     },
-    downloadPDF(){
-        //todo
+    downloadPDF() {
+      //todo
     },
-    isBaixado(item){
-        if(item.situacao == 'B'){
-            return true
-        }
-        return false
-    }
+    isBaixado(item) {
+      if (item.situacao == "B") {
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
@@ -84,7 +97,7 @@ export default {
   border-bottom: thin solid #4b792a79 !important;
   color: #558b2f8f !important;
 }
-.baixado{
-    color:#558b2f !important;
+.baixado {
+  color: #558b2f !important;
 }
 </style>

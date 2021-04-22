@@ -98,8 +98,8 @@ export default {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
       !this.$v.name.maxLength &&
-        errors.push("Name must be at most 15 characters long");
-      !this.$v.name.required && errors.push("Name is required.");
+        errors.push("O campo nome precisa conter até 15 carácteres.");
+      !this.$v.name.required && errors.push("O campo nome é obrigatório");
       errors.length > 0 ? true : false;
       return errors;
     },
